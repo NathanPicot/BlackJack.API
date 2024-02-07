@@ -6,8 +6,8 @@ public class Context : DbContext
 {
   public DbSet<Joueur> Joueur { get; set; }
   public DbSet<Partie> Partie { get; set; }
-
   public DbSet<Carte> Carte { get; set; }
+  public DbSet<Partie_Carte> PartieCartes { get; set; }
   // Ajoutez d'autres DbSet selon vos besoins
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

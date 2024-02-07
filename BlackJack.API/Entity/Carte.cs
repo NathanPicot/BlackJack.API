@@ -6,6 +6,7 @@ public class Carte
 {
   [Key] public int ID_carte { get; set; }
 
-  public string valeur { get; set; }
-  public decimal symbole { get; set; }
+  public int valeur { get; set; }
+  public string symbole { get; set; }
+  public string textCarte { get; set; }
 }

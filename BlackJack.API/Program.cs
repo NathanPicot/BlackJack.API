@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 // Register your services here
 builder.Services.AddDbContext<Context>();
 builder.Services.AddScoped<IJoueurService, JoueurService>();
+builder.Services.AddScoped<ICarteService, CarteService>();
+builder.Services.AddScoped<IPartieService, PartieService>();
 // Add services for other tables as needed
 
 builder.Services.AddCors(options =>

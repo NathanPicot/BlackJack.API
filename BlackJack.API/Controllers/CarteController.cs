@@ -1,3 +1,5 @@
+using BlackJack.API.Entity;
+using BlackJack.API.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlackJack.API.Controllers;
@@ -14,10 +16,10 @@ public class CarteController : Controller
   }
 
   [HttpGet("getAll")]
-  public JsonResult GetAll()
+  public ObjectResult GetAll()
   {
     var cartes = _carteService.GetAllCartes();
-    return Json(cartes);
+    return cartes;
   }
 
   [HttpGet("get {id}")]
@@ -26,4 +28,13 @@ public class CarteController : Controller
     var carte = _carteService.GetCarteById(id);
     return Json(carte);
   }
+
+  [HttpPost("Hit")]
+  public ObjectResult Hit(List<Carte> Cartes)
+  {
+    var result = _carteService.Hit(Cartes);
+
+    return result;
+  }
+  
 }

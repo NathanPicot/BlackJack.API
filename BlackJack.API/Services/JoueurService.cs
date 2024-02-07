@@ -1,6 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using BlackJack.API.Entity;
 using BlackJack.API.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlackJack.API.Services;
 
@@ -27,10 +31,35 @@ public class JoueurService : IJoueurService
   /// </summary>
   /// <param name="joueurId">The ID of the Joueur to retrieve.</param>
   /// <returns>The Joueur object matching the given ID.</returns>
-  public Joueur GetJoueurById(int joueurId)
-  {
-    return _context.Joueur.FirstOrDefault(j => j.ID_joueur == joueurId);
-  }
+public ObjectResult GetJoueurByToken(string token)
+{
+    var key = Encoding.ASCII.GetBytes("ptaincestvachementlongcommeclela");
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var validations = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+
+    var claims = tokenHandler.ValidateToken(token, validations, out var tokenSecure);
+
+    var IdClaim = claims.FindFirst("id");
+    var userId = int.Parse(IdClaim.Value);
+
+    var joueur = _context.Joueur.FirstOrDefault(j => j.ID_joueur == userId);
+
+    // Vérifiez si joueur est null.
+    if (joueur == null)
+    {
+        return new ObjectResult(new { success = false, message = "User not found" }) 
+        { StatusCode = StatusCodes.Status404NotFound };
+    }
+
+    return new ObjectResult(new { success = true, message = "User found", user = joueur })
+    { StatusCode = StatusCodes.Status200OK };
+}
 
   /// <summary>
   ///   Adds a new player to the database.
@@ -50,6 +79,32 @@ public class JoueurService : IJoueurService
     
     return new ObjectResult(new { success = "Joueur ajouter avec succes" })
       { StatusCode = StatusCodes.Status201Created };
+  }
+
+  public ObjectResult LoginJoueur(Joueur joueur)
+  {
+    Joueur? joueurDb = _context.Joueur.FirstOrDefault(j => j.Nom == joueur.Nom && j.Password == joueur.Password);
+
+    if (joueurDb != null)
+    {
+      // Generate JWT token
+      var tokenHandler = new JwtSecurityTokenHandler();
+      var key = Encoding.ASCII.GetBytes("ptaincestvachementlongcommeclela");
+      var tokenDescriptor = new SecurityTokenDescriptor
+      {
+        Subject = new ClaimsIdentity(new[] { new Claim("id", joueurDb.ID_joueur.ToString()) }),
+        Expires = DateTime.UtcNow.AddDays(7),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+      };
+      var token = tokenHandler.CreateToken(tokenDescriptor);
+      var jwtToken = tokenHandler.WriteToken(token);
+
+      return new ObjectResult(new { success = "Connexion Réussis", user = joueur, token = jwtToken })
+        { StatusCode = StatusCodes.Status200OK };
+    }
+    
+    return new ObjectResult(new { error = "Connexion échoué" })
+      { StatusCode = StatusCodes.Status200OK };
   }
 
   /// <summary>

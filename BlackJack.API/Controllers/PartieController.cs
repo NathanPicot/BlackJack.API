@@ -30,10 +30,9 @@ public class PartieController : Controller
   }
 
   [HttpPost("add")]
-  public JsonResult Create(Partie partie)
+  public ObjectResult Create(Partie partie)
   {
-    _partieService.Add(partie);
-    return Json(partie);
+    return _partieService.Add(partie);
   }
 
   [HttpPut("update {id}")]
@@ -48,5 +47,13 @@ public class PartieController : Controller
   {
     _partieService.DeletePartie(id);
     return Json(new { Message = "Joueur supprimé avec succès", JoueurId = id });
+  }
+
+  [HttpPost("endPartie")]
+
+  public JsonResult EndPartie(Partie partie)
+  {
+    _partieService.EndPartie(partie);
+    return Json(new { Message = "Partie Terminer" });
   }
 }

@@ -1,7 +1,11 @@
 using BlackJack.API.Entity;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BlackJack.API.Interface;
 
 public interface ICarteService
 {
-  IEnumerable<Carte> GetAllCartes();
+  ObjectResult GetAllCartes();
   Carte GetCarteById(int ID_carte);
+  ObjectResult Hit(List<Carte> Cartes);
 }

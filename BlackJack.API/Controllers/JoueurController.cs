@@ -22,11 +22,18 @@ public class JoueurController : Controller
     return Json(joueurs);
   }
 
-  [HttpGet("get {id}")]
-  public JsonResult Get(int id)
+  [HttpPost("getByToken")]
+  public ObjectResult Get(string token)
   {
-    var joueur = _joueurService.GetJoueurById(id);
-    return Json(joueur);
+    var joueur = _joueurService.GetJoueurByToken(token);
+    return joueur;
+  }
+
+  [HttpPost("login")]
+  public ObjectResult login(Joueur joueur)
+  {
+    var result = _joueurService.LoginJoueur(joueur);
+    return result;
   }
 
   [HttpPost("add" )]

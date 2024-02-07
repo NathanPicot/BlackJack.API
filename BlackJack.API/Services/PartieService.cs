@@ -1,5 +1,6 @@
 using BlackJack.API.Entity;
 using BlackJack.API.Interface;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlackJack.API.Services;
 
@@ -44,12 +45,14 @@ public class PartieService : IPartieService
   ///   Adds a new "Partie" object to the context and saves the changes.
   /// </summary>
   /// <param name="partie">The "Partie" object to be added.</param>
-  public void Add(Partie partie)
+  public ObjectResult Add(Partie partie)
   {
     _context.Partie.Add(partie);
     _context.SaveChanges();
-  }
 
+    return new ObjectResult(new { success = true, message = "Partie successfully added.", partie })
+      { StatusCode = StatusCodes.Status200OK };
+  }
   /// <summary>
   ///   Updates a Partie in the database based on the provided ID and updatedPartie object.
   /// </summary>
@@ -72,5 +75,10 @@ public class PartieService : IPartieService
       _context.Partie.Remove(partieToDelete);
       _context.SaveChanges();
     }
+  }
+
+  public void EndPartie(Partie partie)
+  {
+    _context.Partie.Update(partie);
   }
 }

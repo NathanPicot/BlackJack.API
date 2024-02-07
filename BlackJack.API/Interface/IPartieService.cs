@@ -1,4 +1,5 @@
 using BlackJack.API.Entity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlackJack.API.Interface;
 
@@ -8,9 +9,11 @@ public interface IPartieService
 
   Partie GetPartieById(int id);
 
-  void Add(Partie partie);
+  ObjectResult Add(Partie partie);
 
   void UpdatePartie(int id, Partie updatedPartie);
 
   void DeletePartie(int id);
+
+  void EndPartie(Partie partie);
 }
