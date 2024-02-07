@@ -12,4 +12,6 @@ public interface IJoueurService
   ObjectResult LoginJoueur(Joueur joueur);
   void UpdateJoueur(Joueur joueur);
   void DeleteJoueur(int joueurId);
+
+  void UpdateMoney(Joueur joueur);
 }

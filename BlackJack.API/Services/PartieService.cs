@@ -80,5 +80,6 @@ public class PartieService : IPartieService
   public void EndPartie(Partie partie)
   {
     _context.Partie.Update(partie);
+    _context.SaveChanges();
   }
 }

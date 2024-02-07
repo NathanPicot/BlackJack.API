@@ -74,6 +74,8 @@ public ObjectResult GetJoueurByToken(string token)
       return new ObjectResult(new { error = "Un joueur avec ce nom existe déjà." })
         { StatusCode = StatusCodes.Status409Conflict };
     }
+
+    joueur.Argent = 1000;
     _context.Joueur.Add(joueur);
     _context.SaveChanges();
     
@@ -132,5 +134,11 @@ public ObjectResult GetJoueurByToken(string token)
       _context.Joueur.Remove(joueurToDelete);
       _context.SaveChanges();
     }
+  }
+  
+  public void UpdateMoney(Joueur joueur)
+  {
+    _context.Joueur.Update(joueur);
+    _context.SaveChanges();
   }
 }

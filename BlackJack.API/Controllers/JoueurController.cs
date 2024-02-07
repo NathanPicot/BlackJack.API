@@ -56,4 +56,11 @@ public class JoueurController : Controller
     _joueurService.DeleteJoueur(id);
     return Json(new { Message = "Joueur supprimé avec succès", JoueurId = id });
   }
+
+  [HttpPost("UpdateMoney")]
+  public JsonResult UpdateMoney(Joueur joueur)
+  {
+    _joueurService.UpdateMoney(joueur);
+    return Json(new { Message = "Argent modifier avec succes" });
+  }
 }
