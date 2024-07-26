@@ -48,6 +48,7 @@ public class PartieService : IPartieService
   /// <param name="partie">The "Partie" object to be added.</param>
   public ObjectResult Add(Partie partie)
   {
+    partie.Date = DateTime.Now;
     _context.Partie.Add(partie);
     _context.SaveChanges();
 
@@ -61,7 +62,17 @@ public class PartieService : IPartieService
   /// <param name="updatedPartie">The updated Partie object to replace the existing Partie in the database.</param>
   public void UpdatePartie(int id, Partie updatedPartie)
   {
-    _context.Partie.Update(updatedPartie);
+    var existingPartie = _context.Partie.Find(id);
+    if (existingPartie != null)
+    {
+      existingPartie.Mise = updatedPartie.Mise;
+      existingPartie.Resultat = updatedPartie.Resultat;
+      existingPartie.ID_joueur = updatedPartie.ID_joueur;
+      existingPartie.Date = DateTime.Today;
+
+      _context.Partie.Update(existingPartie);
+      _context.SaveChanges();
+    }
   }
 
   /// <summary>
@@ -80,6 +91,7 @@ public class PartieService : IPartieService
 
   public void EndPartie(Partie partie)
   {
+    partie.Date = DateTime.Now;
     _context.Partie.Update(partie);
     _context.SaveChanges();
   }
