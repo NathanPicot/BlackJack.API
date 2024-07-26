@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using BlackJack.API.Entity;
 using BlackJack.API.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -82,4 +83,54 @@ public class PartieService : IPartieService
     _context.Partie.Update(partie);
     _context.SaveChanges();
   }
+  
+  /// <summary>
+  /// retourne le totale des Gains des joueurs
+  /// </summary>
+  /// <returns></returns>
+  public decimal GetTotalGain()
+  {
+    var totalGain = _context.Partie
+                                      .Where(p => p.Resultat == "win")
+                                      .Sum(p => p.Mise);
+    totalGain = totalGain * 2.5m;
+    return totalGain;
+  }
+
+  public decimal GetTotalMise()
+  {
+    var totalMise = _context.Partie
+      .Where(p => p.Resultat != "Draw")
+                                      .Sum(p => p.Mise);
+    return totalMise;
+  }
+ 
+  public List<(DateTime Date, decimal GainDuCasino)> FetchAllParties()
+  {
+    // Calculer la date limite pour les 5 derniers jours
+    var cinqDerniersJours = DateTime.Now.AddDays(-8);
+
+    var gainsParJour = _context.Partie
+      .Where(p => p.Date >= cinqDerniersJours && p.Date <= DateTime.Now )  // Filtrer les parties des 5 derniers jours
+      .GroupBy(p => p.Date.Date)  // Assure que la date est sans heure pour le regroupement
+      .Select(g => new
+      {
+        Date = g.Key,
+        GainDuCasino = g.Sum(p =>
+          p.Resultat == "win" ? p.Mise * -1.5m :
+          p.Resultat == "Draw" ? 0 :
+          p.Mise
+        )
+      })
+      .ToList();
+
+    // Convertir la liste d'objets anonymes en liste de tuples
+    var result = gainsParJour
+      .Select(g => (g.Date, g.GainDuCasino))
+      .ToList();
+
+    return result;
+  }
+
+  
 }

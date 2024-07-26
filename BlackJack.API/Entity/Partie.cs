@@ -8,4 +8,5 @@ public class Partie
   public decimal Mise { get; set; }
   public string Resultat { get; set; }
   public int ID_joueur { get; set; }
+  public DateTime Date { get; set; }
 }

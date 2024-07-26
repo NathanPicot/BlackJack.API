@@ -56,4 +56,35 @@ public class PartieController : Controller
     _partieService.EndPartie(partie);
     return Json(new { Message = "Partie Terminer" });
   }
+
+  [HttpGet("getTotalGain")]
+  public JsonResult GetTotalGain()
+  {
+    var totalGain = _partieService.GetTotalGain();
+    return Json(totalGain);
+  }
+  
+  [HttpGet("getTotalMise")]
+  public JsonResult GetTotalMise()
+  {
+    var totalMise = _partieService.GetTotalMise();
+    return Json(totalMise);
+  }
+
+  [HttpGet("getAllPartie")]
+  public IActionResult GetAllPartie()
+  {
+    // Appeler la méthode FetchAllParties pour obtenir les données
+    var allParties = _partieService.FetchAllParties();
+        
+    // Convertir les tuples en objets anonymes pour la sérialisation JSON
+    var result = allParties.Select(p => new
+    {
+      Date = p.Date.ToString("yyyy-MM-dd"), // Format date en chaîne
+      GainDuCasino = p.GainDuCasino
+    }).ToList();
+        
+    // Retourner les données en format JSON
+    return Ok(result); // Utilise Ok() pour retourner des données JSON
+  }
 }

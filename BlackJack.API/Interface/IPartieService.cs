@@ -16,4 +16,10 @@ public interface IPartieService
   void DeletePartie(int id);
 
   void EndPartie(Partie partie);
+
+  decimal GetTotalGain();
+
+  decimal GetTotalMise();
+
+  List<(DateTime Date, decimal GainDuCasino)> FetchAllParties();
 }
