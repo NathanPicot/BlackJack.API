@@ -21,5 +21,7 @@ public interface IPartieService
 
   decimal GetTotalMise();
 
-  List<(DateTime Date, decimal GainDuCasino)> FetchAllParties();
+  List<(DateTime Date, decimal GainDuCasino)> FetchGainPerDay();
+
+  int CountAllParties();
 }

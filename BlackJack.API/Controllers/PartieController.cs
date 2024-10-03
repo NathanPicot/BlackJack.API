@@ -71,11 +71,11 @@ public class PartieController : Controller
     return Json(totalMise);
   }
 
-  [HttpGet("getAllPartie")]
-  public IActionResult GetAllPartie()
+  [HttpGet("getGainPerDayList")]
+  public IActionResult GetGainPerDayList()
   {
-    // Appeler la méthode FetchAllParties pour obtenir les données
-    var allParties = _partieService.FetchAllParties();
+    // Appeler la méthode FetchGainPerDay pour obtenir les données
+    var allParties = _partieService.FetchGainPerDay();
         
     // Convertir les tuples en objets anonymes pour la sérialisation JSON
     var result = allParties.Select(p => new
@@ -86,5 +86,12 @@ public class PartieController : Controller
         
     // Retourner les données en format JSON
     return Ok(result); // Utilise Ok() pour retourner des données JSON
+  }
+
+  [HttpGet("countAllPartie")]
+  public JsonResult CountAllPartie()
+  {
+    var allParties = _partieService.CountAllParties();
+    return Json(allParties);
   }
 }

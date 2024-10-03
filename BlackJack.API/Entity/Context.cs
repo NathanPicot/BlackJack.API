@@ -22,11 +22,11 @@ public class Context : DbContext
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     // Modify this information to match yours
-    const string serverName = "127.0.0.1";
+    const string serverName = "mysql-blackjackdb.alwaysdata.net";
     const int port = 3306;
-    const string databaseName = "blackjackDb";
-    const string username = "root";
-    const string password = "";
+    const string databaseName = "blackjackdb_db";
+    const string username = "370573";
+    const string password = "Nathan2003@@";
 
     // Build the connection string
     var connectionString =

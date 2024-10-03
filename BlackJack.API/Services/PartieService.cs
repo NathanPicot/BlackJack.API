@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.JavaScript;
 using BlackJack.API.Entity;
 using BlackJack.API.Interface;
@@ -108,7 +109,7 @@ public class PartieService : IPartieService
     totalGain = totalGain * 2.5m;
     return totalGain;
   }
-
+  
   public decimal GetTotalMise()
   {
     var totalMise = _context.Partie
@@ -117,7 +118,7 @@ public class PartieService : IPartieService
     return totalMise;
   }
  
-  public List<(DateTime Date, decimal GainDuCasino)> FetchAllParties()
+  public List<(DateTime Date, decimal GainDuCasino)> FetchGainPerDay()
   {
     // Calculer la date limite pour les 5 derniers jours
     var cinqDerniersJours = DateTime.Now.AddDays(-8);
@@ -142,6 +143,13 @@ public class PartieService : IPartieService
       .ToList();
 
     return result;
+  }
+
+  public int CountAllParties()
+  {
+    var numberPartie = _context.Partie.Count();
+
+    return numberPartie;
   }
 
   

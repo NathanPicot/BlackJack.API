@@ -21,21 +21,17 @@ builder.Services.AddCors(options =>
 {
   options.AddPolicy("MyPolicy", builder =>
   {
-    builder.AllowAnyOrigin()
+    builder.WithOrigins("https://nathanpicot.github.io") // Remplacez par l'origine de votre application Vue.js
       .AllowAnyMethod()
       .AllowAnyHeader();
-
   });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
